@@ -25,7 +25,7 @@
 
 return [
     'seatnotifications' => [
-        'name'          => 'SeAT Notifications',
+        'name'          => 'Discord Notifications',
         'icon'          => 'fa-inbox',
         'route_segment' => 'seatnotifications',
         'permission'    => 'seatnotifications.view',
