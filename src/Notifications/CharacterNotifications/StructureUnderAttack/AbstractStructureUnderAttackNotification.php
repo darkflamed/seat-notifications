@@ -23,14 +23,14 @@
  * SOFTWARE.
  */
 
-namespace Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotification;
+namespace Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack;
 
 use Herpaderpaldent\Seat\SeatNotifications\Notifications\AbstractNotification;
 use Seat\Eveapi\Models\Character\CharacterNotification;
 use Seat\Eveapi\Models\Sde\MapDenormalize;
 use Symfony\Component\Yaml\Yaml;
 
-abstract class AbstractCharacterNotification extends AbstractNotification
+abstract class AbstractStructureUnderAttackNotification extends AbstractNotification
 {
     /**
      * @var string

@@ -27,24 +27,28 @@ namespace Herpaderpaldent\Seat\SeatNotifications\Observers;
 
 use Herpaderpaldent\Seat\SeatNotifications\Jobs\CharacterNotificationDispatcher;
 use Seat\Eveapi\Models\Character\CharacterNotification;
-use Symfony\Component\Yaml\Yaml;
+use Carbon\Carbon;
 
 class CharacterNotificationObserver
 {
+    public $test = false;
+
     public function created(CharacterNotification $character_notification)
     {
+        if($this->test || (($character_notification->timestamp ?? null) && Carbon::parse($character_notification->timestamp)->gte(Carbon::now()->subHours(2)))) {
 
-        $job = new CharacterNotificationDispatcher($character_notification);
+            $job = new CharacterNotificationDispatcher($character_notification);
+            dispatch($job)->onQueue('high');
+        }
 
-        dispatch($job)->onQueue('high');
+        return true;
     }
 
     public function test()
     {
-        $character_notification = CharacterNotification::where('type', 'like', 'StructureUnderAttack')->first();
+        $this->test = true;
+        $character_notification = CharacterNotification::where('type', 'like', 'StructureUnderAttack')->orderBy('id', 'desc')->first();
 
-        $job = new CharacterNotificationDispatcher($character_notification);
-
-        dispatch($job)->onQueue('high');
+        $this->created($character_notification);
     }
 }

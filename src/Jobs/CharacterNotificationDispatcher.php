@@ -9,8 +9,7 @@
 namespace Herpaderpaldent\Seat\SeatNotifications\Jobs;
 
 use Herpaderpaldent\Seat\SeatNotifications\Models\NotificationRecipient;
-use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotification\AbstractCharacterNotification;
-use Herpaderpaldent\Seat\SeatNotifications\Notifications\KillMail\AbstractKillMailNotification;
+use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack\AbstractStructureUnderAttackNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redis;
 use Seat\Eveapi\Models\Character\CharacterNotification;
@@ -44,30 +43,28 @@ class CharacterNotificationDispatcher extends SeatNotificationsJobBase
         $this->character_notification = $character_notification;
         $this->notification_id = $character_notification->notification_id;
 
-        array_push($this->tags, 'notification_id: ' . $this->notification_id);
+        array_push($this->tags, 'notification_id_' . $this->notification_id);
     }
 
     public function handle()
     {
         switch($this->character_notification->type) {
             case 'StructureUnderAttack':
-                $this->dispatchNotification();
+                $abstractClass = AbstractStructureUnderAttackNotification::class;
                 break;
             default:
-                logger()->debug('This character notification is not handled ' . $this->notification_id);
-                $this->delete();
-                break;
+                return;
         }
+
+        $this->dispatchNotification($abstractClass);
     }
 
-    private function dispatchNotification()
+    private function dispatchNotification($abstractClass)
     {
-        Redis::funnel('notification_id_' . $this->notification_id)->limit(1)->then(function () {
-            logger()->debug('Character notification for ID: ' . $this->notification_id);
-
+        Redis::funnel('notification_id_' . $this->notification_id)->limit(1)->then(function () use ($abstractClass) {
             $recipients = NotificationRecipient::all()
-                ->filter(function ($recepient) {
-                    return $recepient->shouldReceive(AbstractCharacterNotification::class);
+                ->filter(function ($recepient) use ($abstractClass) {
+                    return $recepient->shouldReceive($abstractClass);
                 });
 
             if($recipients->isEmpty()){
@@ -76,9 +73,9 @@ class CharacterNotificationDispatcher extends SeatNotificationsJobBase
             }
 
             $recipients->groupBy('driver')
-                ->each(function ($grouped_recipients) {
+                ->each(function ($grouped_recipients) use ($abstractClass) {
                     $driver = (string) $grouped_recipients->first()->driver;
-                    $notification_class = AbstractCharacterNotification::getDriverImplementation($driver);
+                    $notification_class = $abstractClass::getDriverImplementation($driver);
 
                     Notification::send($grouped_recipients, (new $notification_class($this->notification_id)));
                 });

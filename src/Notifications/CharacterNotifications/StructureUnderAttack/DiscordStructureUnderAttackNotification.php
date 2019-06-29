@@ -23,13 +23,13 @@
  * SOFTWARE.
  */
 
-namespace Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotification;
+namespace Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack;
 
 use Herpaderpaldent\Seat\SeatNotifications\Channels\Discord\DiscordChannel;
 use Herpaderpaldent\Seat\SeatNotifications\Channels\Discord\DiscordMessage;
 use Seat\Eveapi\Models\Sde\InvType;
 
-class DiscordCharacterNotification extends AbstractCharacterNotification
+class DiscordStructureUnderAttackNotification extends AbstractStructureUnderAttackNotification
 {
     const DANGER_COLOR = '14502713';
 
@@ -52,6 +52,7 @@ class DiscordCharacterNotification extends AbstractCharacterNotification
                 $embed->title($this->getNotificationString())
                     ->thumbnail($this->image)
                     ->color(self::DANGER_COLOR)
+                    ->field('Eve Time', $this->character_notification->timestamp, true)
                     ->field('Structure', InvType::find($this->parsed_text->structureTypeID)->typeName ?? '')
                     ->field('System', $this->getSolarSystemName(), true)
                     ->field('Hull', number_format($this->parsed_text->hullPercentage, 2).'%', true)
