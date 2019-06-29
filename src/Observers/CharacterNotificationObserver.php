@@ -23,12 +23,28 @@
  * SOFTWARE.
  */
 
-return [
-    'seatnotifications' => [
-        'view',
-        'configuration',
-        'refresh_token',
-        'kill_mail',
-        'character_notification',
-    ],
-];
+namespace Herpaderpaldent\Seat\SeatNotifications\Observers;
+
+use Herpaderpaldent\Seat\SeatNotifications\Jobs\CharacterNotificationDispatcher;
+use Seat\Eveapi\Models\Character\CharacterNotification;
+use Symfony\Component\Yaml\Yaml;
+
+class CharacterNotificationObserver
+{
+    public function created(CharacterNotification $character_notification)
+    {
+
+        $job = new CharacterNotificationDispatcher($character_notification);
+
+        dispatch($job)->onQueue('high');
+    }
+
+    public function test()
+    {
+        $character_notification = CharacterNotification::where('type', 'like', 'StructureUnderAttack')->first();
+
+        $job = new CharacterNotificationDispatcher($character_notification);
+
+        dispatch($job)->onQueue('high');
+    }
+}

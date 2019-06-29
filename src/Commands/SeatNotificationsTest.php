@@ -27,6 +27,7 @@ namespace Herpaderpaldent\Seat\SeatNotifications\Commands;
 
 use Herpaderpaldent\Seat\SeatNotifications\Observers\KillmailDetailObserver;
 use Herpaderpaldent\Seat\SeatNotifications\Observers\RefreshTokenObserver;
+use Herpaderpaldent\Seat\SeatNotifications\Observers\CharacterNotificationObserver;
 use Illuminate\Console\Command;
 use Illuminate\Notifications\Notification;
 
@@ -43,7 +44,7 @@ class SeatNotificationsTest extends Command
         parent::__construct();
     }
 
-    public function handle(KillmailDetailObserver $action)
+    public function handle(CharacterNotificationObserver $action)
     {
 
         $this->info('Test');
@@ -54,7 +55,7 @@ class SeatNotificationsTest extends Command
             'content' => 'Test my newly awesome bot'
         ]);*/
 
-        //$this->notify(new RefreshTokenDeleted());
+        //$this->notify(new CharacterNotification());
         //Notification::send(new RefreshTokenObserver() ,new RefreshTokenDeleted());
 
         //$when = now()->addMinutes(10);
