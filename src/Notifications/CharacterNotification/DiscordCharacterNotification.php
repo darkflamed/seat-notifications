@@ -52,7 +52,10 @@ class DiscordCharacterNotification extends AbstractCharacterNotification
                 $embed->title($this->getNotificationString())
                     ->thumbnail($this->image)
                     ->color(self::DANGER_COLOR)
-                    ->field('Structure Information', $this->getStructureInformationString(), true);
+                    ->image(sprintf('https://imageserver.eveonline.com/Type/%d_64.png', $this->parsed_text->structureTypeID))
+                    ->field('System', $this->getSolarSystemName(), true)
+                    ->field('Hull', '%' . number_format($this->parsed_text->hullPercentage, 2), true)
+                    ->field('Shield', '%' . number_format($this->parsed_text->shieldPercentage, 2), true);
             });
     }
 
@@ -61,16 +64,6 @@ class DiscordCharacterNotification extends AbstractCharacterNotification
 
         return sprintf('%s',
             $this->character_notification->type
-        );
-    }
-
-    private function getStructureInformationString(): string
-    {
-        return sprintf('%s\nSystem: %s\nHull: %s\nShield: %s',
-            sprintf('https://imageserver.eveonline.com/Type/%d_64.png', $this->parsed_text->structureTypeID),
-            $this->getSolarSystemName(),
-            '%' . number_format($this->parsed_text->hullPercentage, 2),
-            '%' . number_format($this->parsed_text->shieldPercentage, 2)
         );
     }
 }
