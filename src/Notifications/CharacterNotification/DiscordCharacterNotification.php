@@ -52,16 +52,25 @@ class DiscordCharacterNotification extends AbstractCharacterNotification
                 $embed->title($this->getNotificationString())
                     ->thumbnail($this->image)
                     ->color(self::DANGER_COLOR)
-                    ->field('Text', $this->character_notification->text)
-                    ->footer('test ', 'This is a test');
+                    ->field('Structure Information', $this->getStructureInformationString(), true);
             });
     }
 
     private function getNotificationString(): string
     {
 
-        return sprintf('Notification for: %s',
+        return sprintf('%s',
             $this->character_notification->type
+        );
+    }
+
+    private function getStructureInformationString(): string
+    {
+        return sprintf('%s\nSystem: %s\nHull: %s\nShield: %s',
+            sprintf('https://imageserver.eveonline.com/Type/%d_64.png', $this->parsed_text->structureTypeID),
+            $this->getSolarSystemName(),
+            '%' . number_format($this->parsed_text->hullPercentage, 2),
+            '%' . number_format($this->parsed_text->shieldPercentage, 2)
         );
     }
 }
