@@ -56,7 +56,7 @@ abstract class AbstractStructureUnderAttackNotification extends AbstractNotifica
 
         $this->character_notification = CharacterNotification::where('notification_id', $notification_id)->first();
         $this->parsed_text = Yaml::parse($this->character_notification->text, Yaml::PARSE_OBJECT_FOR_MAP);
-        $this->image = sprintf('https://imageserver.eveonline.com/Type/%d_64.png', $this->parsed_text->structureID);
+        $this->image = sprintf('https://imageserver.eveonline.com/Type/%d_64.png', $this->parsed_text->structureShowInfoData[1]);
 
         array_push($this->tags, 'notification_id:' . $notification_id);
     }
