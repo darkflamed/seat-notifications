@@ -122,7 +122,7 @@ abstract class AbstractSovCommandNodeEventStartedNotification extends AbstractNo
 
     public function getSolarSystemName()
     {
-        return MapDenormalize::where('itemID', $this->parsed_text->solarsystemID)->first()->name ?? $this->parsed_text->solarsystemID;
+        return MapDenormalize::where('itemID', $this->parsed_text->solarSystemID)->first()->name ?? $this->parsed_text->solarSystemID;
     }
 
     public function getEventType()
