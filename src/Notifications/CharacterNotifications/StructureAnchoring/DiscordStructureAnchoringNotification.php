@@ -56,8 +56,8 @@ class DiscordStructureAnchoringNotification extends AbstractStructureAnchoringNo
                     ->field('Structure', InvType::find($this->parsed_text->structureShowInfoData[1])->typeName ?? '')
                     ->field('System', $this->getSolarSystemName(), true)
                     ->field('Owner', $this->parsed_text->ownerCorpName, true)
-                    ->field('Time Left', gmdate("H:i:s",intval($this->parsed_text->timeLeft) / 100000000), true)
-                    ->field('Vulnerable Time', gmdate("H:i:s",intval($this->parsed_text->vulnerableTime) / 100000000), true);
+                    ->field('Time Left', gmdate("d:H:i:s",intval($this->parsed_text->timeLeft) / 10000000), true)
+                    ->field('Vulnerable Time', gmdate("d:H:i:s",intval($this->parsed_text->vulnerableTime) / 10000000), true);
             });
     }
 }
