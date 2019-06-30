@@ -26,7 +26,9 @@
 namespace Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack;
 
 use Herpaderpaldent\Seat\SeatNotifications\Notifications\AbstractNotification;
+use Seat\Eveapi\Models\Character\CharacterInfo;
 use Seat\Eveapi\Models\Character\CharacterNotification;
+use Seat\Eveapi\Models\Corporation\CorporationInfo;
 use Seat\Eveapi\Models\Sde\MapDenormalize;
 use Symfony\Component\Yaml\Yaml;
 
@@ -123,5 +125,10 @@ abstract class AbstractStructureUnderAttackNotification extends AbstractNotifica
     public function getSolarSystemName()
     {
         return MapDenormalize::where('itemID', $this->parsed_text->solarsystemID)->first()->name ?? $this->parsed_text->solarsystemID;
+    }
+
+    public function getOwnerCorporation()
+    {
+        return CorporationInfo::find(CharacterInfo::find($this->character_notification->character_id)->corporation_id ?? 0)->name ?? '';
     }
 }

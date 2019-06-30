@@ -54,6 +54,7 @@ class DiscordStructureUnderAttackNotification extends AbstractStructureUnderAtta
                     ->color(self::DANGER_COLOR)
                     ->field('Eve Time', $this->character_notification->timestamp, true)
                     ->field('Structure', InvType::find($this->parsed_text->structureTypeID)->typeName ?? '')
+                    ->field('Owner', $this->getOwnerCorporation(), true)
                     ->field('System', $this->getSolarSystemName(), true)
                     ->field('Hull', number_format($this->parsed_text->hullPercentage, 2).'%', true)
                     ->field('Shield', number_format($this->parsed_text->shieldPercentage, 2).'%', true)
