@@ -40,7 +40,7 @@ return [
             'slack'   => Herpaderpaldent\Seat\SeatNotifications\Notifications\KillMail\SlackKillMailNotification::class,
         ],
         Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack\AbstractStructureUnderAttackNotification::class         => [
-            'discord' => Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack\DiscordStructureUnderAttackNotification::class,
+            'discord' => Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack\DiscordStructureAnchoringNotification::class,
         ],
 
     ],

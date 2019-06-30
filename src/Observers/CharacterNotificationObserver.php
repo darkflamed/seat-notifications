@@ -47,8 +47,10 @@ class CharacterNotificationObserver
     public function test()
     {
         $this->test = true;
-        $character_notification = CharacterNotification::where('type', 'like', 'StructureUnderAttack')->orderBy('id', 'desc')->first();
+        $character_notification = CharacterNotification::where('type', 'like', 'StructureUnderAttack')->orderBy('timestamp', 'desc')->first();
+        $this->created($character_notification);
 
+        $character_notification = CharacterNotification::where('type', 'like', 'StructureAnchoring')->orderBy('timestamp', 'desc')->first();
         $this->created($character_notification);
     }
 }

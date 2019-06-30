@@ -30,7 +30,7 @@ use Seat\Eveapi\Models\Character\CharacterNotification;
 use Seat\Eveapi\Models\Sde\MapDenormalize;
 use Symfony\Component\Yaml\Yaml;
 
-abstract class AbstractStructureUnderAttackNotification extends AbstractNotification
+abstract class AbstractStructureAnchoringNotification extends AbstractNotification
 {
     /**
      * @var string
@@ -53,8 +53,8 @@ abstract class AbstractStructureUnderAttackNotification extends AbstractNotifica
         parent::__construct();
 
         $this->character_notification = CharacterNotification::where('notification_id', $notification_id)->first();
-        $this->image = sprintf('https://imageserver.eveonline.com/'. $this->character_notification->sender_type .'/%d_64.png', $this->character_notification->sender_id);
         $this->parsed_text = Yaml::parse($this->character_notification->text, Yaml::PARSE_OBJECT_FOR_MAP);
+        $this->image = sprintf('https://imageserver.eveonline.com/Type/%d_64.png', $this->parsed_text->structureShowInfoData[1]);
 
         array_push($this->tags, 'notification_id:' . $notification_id);
     }
@@ -65,7 +65,7 @@ abstract class AbstractStructureUnderAttackNotification extends AbstractNotifica
     final public static function getTitle(): string
     {
 
-        return 'Structure Under Attack Notification';
+        return 'Structure Anchoring Notification';
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class AbstractStructureUnderAttackNotification extends AbstractNotifica
     final public static function getDescription(): string
     {
 
-        return 'Receive a notification about structure under attack notifications.';
+        return 'Receive a notification about structure anchoring notifications.';
     }
 
     /**

@@ -29,7 +29,7 @@ use Herpaderpaldent\Seat\SeatNotifications\Channels\Discord\DiscordChannel;
 use Herpaderpaldent\Seat\SeatNotifications\Channels\Discord\DiscordMessage;
 use Seat\Eveapi\Models\Sde\InvType;
 
-class DiscordStructureUnderAttackNotification extends AbstractStructureUnderAttackNotification
+class DiscordStructureAnchoringNotification extends AbstractStructureUnderAttackNotification
 {
     const DANGER_COLOR = '14502713';
 
@@ -49,16 +49,15 @@ class DiscordStructureUnderAttackNotification extends AbstractStructureUnderAtta
         return (new DiscordMessage)
             ->embed(function ($embed) use ($notifiable) {
 
-                $embed->title('Structure Under Attack')
+                $embed->title('Structure Anchoring')
                     ->thumbnail($this->image)
                     ->color(self::DANGER_COLOR)
                     ->field('Eve Time', $this->character_notification->timestamp, true)
-                    ->field('Structure', InvType::find($this->parsed_text->structureTypeID)->typeName ?? '')
+                    ->field('Structure', InvType::find($this->parsed_text->structureShowInfoData[1])->typeName ?? '')
                     ->field('System', $this->getSolarSystemName(), true)
-                    ->field('Hull', number_format($this->parsed_text->hullPercentage, 2).'%', true)
-                    ->field('Shield', number_format($this->parsed_text->shieldPercentage, 2).'%', true)
-                    ->field('Attacker Alliance', $this->parsed_text->allianceName)
-                    ->field('Attacker Corporation', $this->parsed_text->corpName, true);
+                    ->field('Owner', $this->parsed_text->ownerCorpName, true)
+                    ->field('Time Left', gmdate("H:i:s",$this->parsed_text->timeLeft / 100000000), true)
+                    ->field('Vulnerable Time', gmdate("H:i:s",$this->parsed_text->vulnerableTime / 100000000), true);
             });
     }
 }

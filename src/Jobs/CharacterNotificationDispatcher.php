@@ -9,6 +9,7 @@
 namespace Herpaderpaldent\Seat\SeatNotifications\Jobs;
 
 use Herpaderpaldent\Seat\SeatNotifications\Models\NotificationRecipient;
+use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack\AbstractStructureAnchoringNotification;
 use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack\AbstractStructureUnderAttackNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redis;
@@ -51,6 +52,9 @@ class CharacterNotificationDispatcher extends SeatNotificationsJobBase
         switch($this->character_notification->type) {
             case 'StructureUnderAttack':
                 $abstractClass = AbstractStructureUnderAttackNotification::class;
+                break;
+            case 'StructureAnchoring':
+                $abstractClass = AbstractStructureAnchoringNotification::class;
                 break;
             default:
                 return;
