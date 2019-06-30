@@ -65,7 +65,7 @@ abstract class AbstractSovCommandNodeEventStartedNotification extends AbstractNo
     final public static function getTitle(): string
     {
 
-        return 'Structure Anchoring Notification';
+        return 'Sov Node Event Started Notification';
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class AbstractSovCommandNodeEventStartedNotification extends AbstractNo
     final public static function getDescription(): string
     {
 
-        return 'Receive a notification about structure anchoring notifications.';
+        return 'Receive a notification about Sov Node Event Started notifications.';
     }
 
     /**

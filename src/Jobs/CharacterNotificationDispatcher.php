@@ -69,7 +69,7 @@ class CharacterNotificationDispatcher extends SeatNotificationsJobBase
 
     private function dispatchNotification($abstractClass)
     {
-        Redis::funnel('notification_id_' . $this->notification_id)->limit(1)->then(function () use ($abstractClass) {
+        Redis::funnel('notification_id_' . $this->notification_id)->allow(1)->every(7200)->then(function () use ($abstractClass) {
             $recipients = NotificationRecipient::all()
                 ->filter(function ($recepient) use ($abstractClass) {
                     return $recepient->shouldReceive($abstractClass);
