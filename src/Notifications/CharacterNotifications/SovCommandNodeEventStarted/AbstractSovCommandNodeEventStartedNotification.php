@@ -54,7 +54,7 @@ abstract class AbstractSovCommandNodeEventStartedNotification extends AbstractNo
 
         $this->character_notification = CharacterNotification::where('notification_id', $notification_id)->first();
         $this->parsed_text = Yaml::parse($this->character_notification->text, Yaml::PARSE_OBJECT_FOR_MAP);
-        $this->image = sprintf('https://imageserver.eveonline.com/$s/%d_64.png', $this->character_notification->sender_type, $this->character_notification->sender_id);
+        $this->image = sprintf('https://imageserver.eveonline.com/%s/%d_64.png', $this->character_notification->sender_type, $this->character_notification->sender_id);
 
         array_push($this->tags, 'notification_id:' . $notification_id);
     }
