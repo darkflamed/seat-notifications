@@ -9,7 +9,7 @@
 namespace Herpaderpaldent\Seat\SeatNotifications\Jobs;
 
 use Herpaderpaldent\Seat\SeatNotifications\Models\NotificationRecipient;
-use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack\AbstractStructureAnchoringNotification;
+use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureAnchoring\AbstractStructureAnchoringNotification;
 use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack\AbstractStructureUnderAttackNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redis;

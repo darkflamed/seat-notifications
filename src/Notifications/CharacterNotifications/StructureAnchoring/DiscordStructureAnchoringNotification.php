@@ -23,13 +23,13 @@
  * SOFTWARE.
  */
 
-namespace Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack;
+namespace Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureAnchoring;
 
 use Herpaderpaldent\Seat\SeatNotifications\Channels\Discord\DiscordChannel;
 use Herpaderpaldent\Seat\SeatNotifications\Channels\Discord\DiscordMessage;
 use Seat\Eveapi\Models\Sde\InvType;
 
-class DiscordStructureAnchoringNotification extends AbstractStructureUnderAttackNotification
+class DiscordStructureAnchoringNotification extends AbstractStructureAnchoringNotification
 {
     const DANGER_COLOR = '14502713';
 

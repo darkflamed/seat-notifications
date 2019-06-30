@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-namespace Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack;
+namespace Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureAnchoring;
 
 use Herpaderpaldent\Seat\SeatNotifications\Notifications\AbstractNotification;
 use Seat\Eveapi\Models\Character\CharacterNotification;
