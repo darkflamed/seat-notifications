@@ -45,6 +45,8 @@ return [
         Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureAnchoring\AbstractStructureAnchoringNotification::class         => [
             'discord' => Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureAnchoring\DiscordStructureAnchoringNotification::class,
         ],
-
+        Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\SovCommandNodeEventStarted\AbstractSovCommandNodeEventStartedNotification::class         => [
+            'discord' => Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\SovCommandNodeEventStarted\DiscordSovCommandNodeEventStartedNotification::class,
+        ],
     ],
 ];

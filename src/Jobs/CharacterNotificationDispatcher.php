@@ -9,6 +9,7 @@
 namespace Herpaderpaldent\Seat\SeatNotifications\Jobs;
 
 use Herpaderpaldent\Seat\SeatNotifications\Models\NotificationRecipient;
+use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\SovCommandNodeEventStarted\AbstractSovCommandNodeEventStartedNotification;
 use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureAnchoring\AbstractStructureAnchoringNotification;
 use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack\AbstractStructureUnderAttackNotification;
 use Illuminate\Support\Facades\Notification;
@@ -55,6 +56,9 @@ class CharacterNotificationDispatcher extends SeatNotificationsJobBase
                 break;
             case 'StructureAnchoring':
                 $abstractClass = AbstractStructureAnchoringNotification::class;
+                break;
+            case 'SovCommandNodeEventStarted':
+                $abstractClass = AbstractSovCommandNodeEventStartedNotification::class;
                 break;
             default:
                 return;
