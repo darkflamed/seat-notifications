@@ -71,7 +71,7 @@ class CharacterNotificationDispatcher extends SeatNotificationsJobBase
     private function dispatchNotification($abstractClass)
     {
         Cache::lock('notification_id_'.$this->notification_id)->get(function () use ($abstractClass) {
-            if( Cache::has('notification_id_'.$this->notification_id)) {
+            if(Cache::get('notification_id_'.$this->notification_id)) {
                 logger()->debug('A character notification job is already running for ' . $this->notification_id);
                 return;
             }
