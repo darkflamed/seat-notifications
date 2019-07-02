@@ -70,14 +70,14 @@ class CharacterNotificationDispatcher extends SeatNotificationsJobBase
 
     private function dispatchNotification($abstractClass)
     {
-        Cache::lock('notification_id_'.$this->notification_id)->get(function () use ($abstractClass) {
-            if(Cache::get('notification_id_'.$this->notification_id)) {
-                logger()->debug('A character notification job is already running for (cache) ' . $this->notification_id . ' : ' . Cache::get('notification_id_'.$this->notification_id));
+        Cache::lock('notification_id_lock_'.$this->notification_id)->get(function () use ($abstractClass) {
+            if(Cache::get('notification_id_job_'.$this->notification_id, false)) {
+                logger()->debug('A character notification job is already running for (cache) ' . $this->notification_id . ' : ' . Cache::get('notification_id_job_'.$this->notification_id));
                 return;
             }
-            Cache::put('notification_id_'.$this->notification_id, true, 7201);
+            Cache::put('notification_id_job_'.$this->notification_id, true, 7201);
 
-            Redis::funnel('notification_id_' . $this->notification_id)->then(function () use ($abstractClass) {
+            Redis::funnel('notification_id_job_' . $this->notification_id)->then(function () use ($abstractClass) {
                 $recipients = NotificationRecipient::all()
                     ->filter(function ($recepient) use ($abstractClass) {
                         return $recepient->shouldReceive($abstractClass);
