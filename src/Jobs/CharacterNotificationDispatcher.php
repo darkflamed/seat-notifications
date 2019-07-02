@@ -70,38 +70,37 @@ class CharacterNotificationDispatcher extends SeatNotificationsJobBase
 
     private function dispatchNotification($abstractClass)
     {
-        Cache::lock('notification_id_'.$this->notification_id)->get(function () {
+        Cache::lock('notification_id_'.$this->notification_id)->get(function () use ($abstractClass) {
             if( Cache::has('notification_id_'.$this->notification_id)) {
                 logger()->debug('A character notification job is already running for ' . $this->notification_id);
-                $this->delete();
                 return;
             }
-            Cache::put('notification_id_'.$this->notification_id, true, 7200);
-        });
+            Cache::put('notification_id_'.$this->notification_id, true, 7201);
 
-        Redis::funnel('notification_id_' . $this->notification_id)->limit(1)->then(function () use ($abstractClass) {
-            $recipients = NotificationRecipient::all()
-                ->filter(function ($recepient) use ($abstractClass) {
-                    return $recepient->shouldReceive($abstractClass);
-                });
+            Redis::funnel('notification_id_' . $this->notification_id)->limit(1)->then(function () use ($abstractClass) {
+                $recipients = NotificationRecipient::all()
+                    ->filter(function ($recepient) use ($abstractClass) {
+                        return $recepient->shouldReceive($abstractClass);
+                    });
 
-            if($recipients->isEmpty()){
-                logger()->debug('No Receiver found for this Notification. This job is going to be deleted.');
+                if($recipients->isEmpty()){
+                    logger()->debug('No Receiver found for this Notification. This job is going to be deleted.');
+                    $this->delete();
+                }
+
+                $recipients->groupBy('driver')
+                    ->each(function ($grouped_recipients) use ($abstractClass) {
+                        $driver = (string) $grouped_recipients->first()->driver;
+                        $notification_class = $abstractClass::getDriverImplementation($driver);
+
+                        Notification::send($grouped_recipients, (new $notification_class($this->notification_id)));
+                    });
+
+            }, function () {
+
+                logger()->debug('A character notification job is already running for ' . $this->notification_id);
                 $this->delete();
-            }
-
-            $recipients->groupBy('driver')
-                ->each(function ($grouped_recipients) use ($abstractClass) {
-                    $driver = (string) $grouped_recipients->first()->driver;
-                    $notification_class = $abstractClass::getDriverImplementation($driver);
-
-                    Notification::send($grouped_recipients, (new $notification_class($this->notification_id)));
-                });
-
-        }, function () {
-
-            logger()->debug('A character notification job is already running for ' . $this->notification_id);
-            $this->delete();
+            });
         });
     }
 }
