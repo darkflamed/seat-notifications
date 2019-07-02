@@ -12,6 +12,7 @@ use Herpaderpaldent\Seat\SeatNotifications\Models\NotificationRecipient;
 use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\SovCommandNodeEventStarted\AbstractSovCommandNodeEventStartedNotification;
 use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureAnchoring\AbstractStructureAnchoringNotification;
 use Herpaderpaldent\Seat\SeatNotifications\Notifications\CharacterNotifications\StructureUnderAttack\AbstractStructureUnderAttackNotification;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redis;
 use Seat\Eveapi\Models\Character\CharacterNotification;
@@ -69,7 +70,16 @@ class CharacterNotificationDispatcher extends SeatNotificationsJobBase
 
     private function dispatchNotification($abstractClass)
     {
-        Redis::funnel('notification_id_' . $this->notification_id)->allow(1)->every(7200)->then(function () use ($abstractClass) {
+        Cache::lock('notification_id_'.$this->notification_id)->get(function () {
+            if( Cache::has('notification_id_'.$this->notification_id)) {
+                logger()->debug('A character notification job is already running for ' . $this->notification_id);
+                $this->delete();
+                return;
+            }
+            Cache::put('notification_id_'.$this->notification_id, true, 7200);
+        });
+
+        Redis::funnel('notification_id_' . $this->notification_id)->limit(1)->then(function () use ($abstractClass) {
             $recipients = NotificationRecipient::all()
                 ->filter(function ($recepient) use ($abstractClass) {
                     return $recepient->shouldReceive($abstractClass);
